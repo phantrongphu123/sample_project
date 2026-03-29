@@ -16,6 +16,6 @@ import java.util.List;
 public class Category extends Auditable<String> {
     @Column(name = "name", unique = true)
     private String name;
-    @Column(name = "description", length = 1000)
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 }

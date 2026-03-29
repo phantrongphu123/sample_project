@@ -29,4 +29,6 @@ public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpec
     Optional<Account> findByUsernameOrPhone(@Param("username") String username, @Param("phone") String phone);
 
     Optional<Account> findByIdAndStatus(long id, Integer status);
+
+    Account findByUsername(String username);
 }

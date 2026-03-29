@@ -7,6 +7,7 @@ import com.mgr.api.repository.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -102,6 +103,23 @@ public class UserServiceImpl implements UserDetailsService {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userPrincipal, null, userDetails.getAuthorities());
         OAuth2Authentication auth = new OAuth2Authentication(oAuth2Request, authenticationToken);
         return tokenServices.createAccessToken(auth);
+    }
+    public Authentication authenticateForUserType(String username, String password, int requiredKind) {
+        // Tìm Account
+        Account account = accountRepository.findByUsername(username);
+
+        if (account == null || account.getKind() != requiredKind) {
+            throw new BadCredentialsException("Invalid account or unauthorized kind");
+        }
+
+        if (!passwordEncoder.matches(password, account.getPassword())) {
+            throw new BadCredentialsException("Invalid password");
+        }
+
+        UserDetails userDetails = loadUserByUsername(username);
+
+        // Trả về đối tượng Authentication đơn thuần
+        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
     private Set<GrantedAuthority> getAccountPermission(Account user) {
