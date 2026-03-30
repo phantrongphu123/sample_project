@@ -49,7 +49,7 @@ public class NewsController extends ABasicController {
         Category category = categoryRepository.findById(createNewsForm.getCategoryId())
                 .orElseThrow(() -> new NotFoundException("Category not found!", ErrorCode.CATEGORY_ERROR_NOT_FOUND));
 
-        News news = newsMapper.fromCreateFormToEntity(createNewsForm);
+        News news = newsMapper.fromCreateNewsFormToEntity(createNewsForm);
         news.setCategory(category);
         news.setStatus(createNewsForm.getStatus());
 
@@ -66,13 +66,13 @@ public class NewsController extends ABasicController {
         News news = newsRepository.findById(updateNewsForm.getId())
                 .orElseThrow(() -> new NotFoundException("News not found!", ErrorCode.NEWS_ERROR_NOT_FOUND));
 
-        if (updateNewsForm.getCategoryId() != null) {
-            Category category = categoryRepository.findById(updateNewsForm.getCategoryId())
-                    .orElseThrow(() -> new NotFoundException("Category not found!", ErrorCode.CATEGORY_ERROR_NOT_FOUND));
-            news.setCategory(category);
-        }
+        // categoryID has been valid in form
+        Category category = categoryRepository.findById(updateNewsForm.getCategoryId())
+                .orElseThrow(() -> new NotFoundException("Category not found!", ErrorCode.CATEGORY_ERROR_NOT_FOUND));
 
-        newsMapper.mappingUpdateFormToEntity(updateNewsForm, news);
+        news.setCategory(category);
+
+        newsMapper.mappingUpdateNewsFormToEntity(updateNewsForm, news);
         newsRepository.save(news);
         apiMessageDto.setMessage("Update news success.");
         return apiMessageDto;
@@ -85,7 +85,7 @@ public class NewsController extends ABasicController {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("News not found!", ErrorCode.NEWS_ERROR_NOT_FOUND));
 
-        apiMessageDto.setData(newsMapper.fromEntityToDto(news));
+        apiMessageDto.setData(newsMapper.fromEntityToNewsDto(news));
         apiMessageDto.setMessage("Get news success.");
         return apiMessageDto;
     }
@@ -102,7 +102,7 @@ public class NewsController extends ABasicController {
         // newsMapper.fromEntityListToDtoList trả về List<NewsDto>
         // Vì vậy T trong ResponseListDto là List<NewsDto>
         ResponseListDto<List<NewsDto>> responseListDto = new ResponseListDto<>(
-                newsMapper.fromEntityListToDtoList(page.getContent()),
+                newsMapper.fromEntityToNewsDtoList(page.getContent()),
                 page.getTotalElements(),
                 page.getTotalPages()
         );

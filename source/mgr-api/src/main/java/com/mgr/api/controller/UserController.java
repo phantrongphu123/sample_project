@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,6 +56,16 @@ public class UserController extends ABasicController {
         // Kiểm tra username tồn tại
         if (accountRepository.findFirstByUsername(createUserForm.getUsername()).isPresent()) {
             throw new BadRequestException("Username is existed!", ErrorCode.ACCOUNT_ERROR_USERNAME_EXISTED);
+        }
+
+        //Check both email and phone
+        // 2. Kiểm tra Email (Dùng Boolean existsByEmail)
+        if (createUserForm.getEmail() != null && accountRepository.existsByEmail(createUserForm.getEmail())) {
+            throw new BadRequestException("Email is existed!", ErrorCode.ACCOUNT_ERROR_EMAIL_EXISTED);
+        }
+
+        if (createUserForm.getPhone() != null && accountRepository.existsByPhone(createUserForm.getPhone())) {
+            throw new BadRequestException("Phone is existed!", ErrorCode.ACCOUNT_ERROR_PHONE_EXISTED);
         }
 
         // 1. Tạo Account (kind = 2 cho người dùng)

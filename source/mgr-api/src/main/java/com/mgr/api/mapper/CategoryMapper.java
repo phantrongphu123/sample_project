@@ -48,4 +48,12 @@ public interface CategoryMapper {
     @IterableMapping(elementTargetType = CategoryDto.class, qualifiedByName = "fromCategoryToDto")
     @Named("fromEntityToCategoryDtoList")
     List<CategoryDto> fromEntityToCategoryDtoList(List<Category> categories);
+
+
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "name", target = "name")
+    @Mapping(source = "description", target = "description")
+    @BeanMapping(ignoreByDefault = true)
+    @Named("fromEntityToCategoryDtoShort")
+    CategoryDto fromEntityToCategoryDtoShort(Category category);
 }
