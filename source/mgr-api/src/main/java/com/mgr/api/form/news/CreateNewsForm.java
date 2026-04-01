@@ -15,5 +15,4 @@ public class CreateNewsForm {
     private Long categoryId;
     private Integer status;
 
-
 }

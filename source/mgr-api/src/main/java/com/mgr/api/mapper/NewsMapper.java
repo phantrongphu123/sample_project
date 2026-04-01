@@ -17,23 +17,17 @@ public interface NewsMapper {
     // Không ignore id và category, dùng source/target để ánh xạ thẳng
     @Mapping(source = "title", target = "title")
     @Mapping(source = "content", target = "content")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "avatar", target = "avatar")
-    @Mapping(source = "categoryId", target = "category.id")
+   // @Mapping(source = "categoryId", target = "category.id")
     News fromCreateNewsFormToEntity(CreateNewsForm form);
 
     @Mapping(source = "title", target = "title")
     @Mapping(source = "content", target = "content")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "avatar", target = "avatar")
-    @Mapping(source = "categoryId", target = "category.id")
+    //@Mapping(source = "categoryId", target = "category.id")
     void mappingUpdateNewsFormToEntity(UpdateNewsForm form, @MappingTarget News news);
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "title", target = "title")
     @Mapping(source = "content", target = "content")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "avatar", target = "avatar")
     // Sử dụng CategoryMapper để lấy đúng 3 trường: id, name, description
     @Mapping(source = "category", target = "category", qualifiedByName = "fromEntityToCategoryDtoShort")
     @Mapping(source = "status", target = "status")
