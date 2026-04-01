@@ -110,7 +110,24 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     private TokenGranter tokenGranter(final AuthorizationServerEndpointsConfigurer endpoints) {
         List<TokenGranter> granters = new ArrayList<TokenGranter>(Arrays.asList(endpoints.getTokenGranter()));
-        granters.add(new CustomTokenGranter(authenticationManager, endpoints.getTokenServices(), endpoints.getClientDetailsService(), endpoints.getOAuth2RequestFactory(), SecurityConstant.GRANT_TYPE_CUSTOM, userService));
+        // Đăng ký cho loại 'custom'
+        granters.add(new CustomTokenGranter(
+                authenticationManager,
+                endpoints.getTokenServices(),
+                endpoints.getClientDetailsService(),
+                endpoints.getOAuth2RequestFactory(),
+                userService,
+                SecurityConstant.GRANT_TYPE_CUSTOM));
+
+        // Đăng ký cho loại 'user' (Dùng chung class nhưng khai báo type khác)
+        granters.add(new CustomTokenGranter(
+                authenticationManager,
+                endpoints.getTokenServices(),
+                endpoints.getClientDetailsService(),
+                endpoints.getOAuth2RequestFactory(),
+                userService,
+                SecurityConstant.GRANT_TYPE_USER));
+
         return new CompositeTokenGranter(granters);
     }
 
@@ -119,6 +136,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         oauthServer.allowFormAuthenticationForClients();// to past post_data: client_id=myApp&client_secret=123
         oauthServer.tokenKeyAccess("hasAuthority('ROLE_TRUSTED_CLIENT')")
                 .checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
-        oauthServer.checkTokenAccess("permitAll()");
+        oauthServer.checkTokenAccess("permitAll()"); //ssOnly
+
     }
 }

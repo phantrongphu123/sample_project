@@ -40,5 +40,14 @@ public class ErrorCode {
     public static final String CATEGORY_ERROR_NOT_FOUND = "ERROR-CATEGORY-0000";
     public static final String CATEGORY_ERROR_NAME_EXISTED = "ERROR-CATEGORY-0001";
 
+    //News code
+    public static final String NEWS_ERROR_NOT_FOUND = "ERROR-NEWS-0000";
+
+    //User code
+    public static final String USER_ERROR_NOT_FOUND = "ERROR-USER-0000";
+    public static final String ACCOUNT_ERROR_EMAIL_EXISTED = "ERROR-USER-0001";
+    public static final String ACCOUNT_ERROR_PHONE_EXISTED = "ERROR-USER-0002";
+
+
 
 }

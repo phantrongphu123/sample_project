@@ -11,27 +11,17 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface CategoryMapper {
-    /**
-     * Map từ Form tạo mới sang Entity Category
-     */
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "status", ignore = true)
     @Mapping(source = "name", target = "name")
     @Mapping(source = "description", target = "description")
     @BeanMapping(ignoreByDefault = true)
     Category fromCreateCategoryFormToEntity(CreateCategoryForm form);
 
-    /**
-     * Cập nhật dữ liệu từ Update Form vào Entity hiện có
-     */
+
     @Mapping(source = "name", target = "name")
     @Mapping(source = "description", target = "description")
     @BeanMapping(ignoreByDefault = true)
     void mappingUpdateCategoryToEntity(UpdateCategoryForm form, @MappingTarget Category category);
 
-    /**
-     * Chuyển đổi từ Entity sang DTO để trả về Client
-     */
     @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
     @Mapping(source = "description", target = "description")
@@ -48,4 +38,12 @@ public interface CategoryMapper {
     @IterableMapping(elementTargetType = CategoryDto.class, qualifiedByName = "fromCategoryToDto")
     @Named("fromEntityToCategoryDtoList")
     List<CategoryDto> fromEntityToCategoryDtoList(List<Category> categories);
+
+
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "name", target = "name")
+    @Mapping(source = "description", target = "description")
+    @BeanMapping(ignoreByDefault = true)
+    @Named("fromEntityToCategoryDtoShort")
+    CategoryDto fromEntityToCategoryDtoShort(Category category);
 }
