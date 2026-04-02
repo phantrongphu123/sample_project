@@ -22,12 +22,9 @@ public interface CategoryMapper {
     @BeanMapping(ignoreByDefault = true)
     void mappingUpdateCategoryToEntity(UpdateCategoryForm form, @MappingTarget Category category);
 
-    @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "description", target = "description")
-    @Mapping(source = "status", target = "status")
-    @Mapping(source = "createdDate", target = "createdDate")
-    @Mapping(source = "modifiedDate", target = "modifiedDate")
     @BeanMapping(ignoreByDefault = true)
     @Named("fromCategoryToDto")
     CategoryDto fromCategoryToDto(Category category);
@@ -40,8 +37,8 @@ public interface CategoryMapper {
     List<CategoryDto> fromEntityToCategoryDtoList(List<Category> categories);
 
 
-    @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "description", target = "description")
     @BeanMapping(ignoreByDefault = true)
     @Named("fromEntityToCategoryDtoShort")

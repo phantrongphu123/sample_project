@@ -87,4 +87,23 @@ public class CategoryController extends ABasicController {
         apiMessageDto.setMessage("List category success.");
         return apiMessageDto;
     }
+
+    @GetMapping(value = "/list-internal", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CAT_L_INT')")
+    public ApiMessageDto<List<CategoryDto>> listInternal() {
+        // 1. Lấy dữ liệu từ DB (Chỉ lấy các bản ghi có status = 1 - Active)
+        List<Category> categories = categoryRepository.findAllByStatus(1);
+
+        // 2. Khởi tạo Response
+        ApiMessageDto<List<CategoryDto>> apiMessageDto = new ApiMessageDto<>();
+
+        // 3. Sử dụng hàm từ Entity sang List DTO
+        // Hàm này sẽ tự động gọi "fromCategoryToDto" cho từng phần tử
+        List<CategoryDto> categoryDtos = categoryMapper.fromEntityToCategoryDtoList(categories);
+
+        apiMessageDto.setData(categoryDtos);
+        apiMessageDto.setMessage("Get list internal success.");
+
+        return apiMessageDto;
+    }
 }

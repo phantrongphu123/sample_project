@@ -26,7 +26,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
+@RestController("newsControllerV2")
 @RequestMapping("/v1/news")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @Slf4j
@@ -123,4 +123,6 @@ public class NewsController extends ABasicController {
         response.setMessage("Delete news success");
         return response;
     }
+
+
 }
