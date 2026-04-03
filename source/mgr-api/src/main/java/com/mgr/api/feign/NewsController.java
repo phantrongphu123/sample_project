@@ -2,12 +2,14 @@ package com.mgr.api.feign;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mgr.api.controller.ABasicController;
 import com.mgr.api.dto.ApiMessageDto;
 import com.mgr.api.dto.category.CategoryDto;
 import com.mgr.api.dto.news.NewsDto;
 import com.mgr.api.form.news.CreateNewsForm;
 import com.mgr.api.form.news.UpdateNewsForm;
 import com.mgr.api.mapper.NewsMapper;
+import com.mgr.api.model.Account;
 import com.mgr.api.model.Category;
 import com.mgr.api.model.News;
 import com.mgr.api.repository.NewsRepository;
@@ -28,7 +30,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/v2/news")
 @Slf4j
-public class NewsController {
+public class NewsController extends ABasicController {
 
     @Autowired
     private NewsRepository newsRepository;
@@ -85,16 +87,29 @@ public class NewsController {
                 return apiMessageDto;
             }
 
-            // 4. Lưu News
+            // 4. Khởi tạo News
             News news = new News();
             news.setTitle(createNewsForm.getTitle());
             news.setContent(createNewsForm.getContent());
             news.setStatus(1);
 
+//            newsRepository.save(news);
+//
+//            apiMessageDto.setMessage("Create news success!");
+//            return apiMessageDto;
+
+            // THÊM: Gán Account cho News
+            Account account = new Account();
+            account.setId(getCurrentUser()); // Lấy ID từ token thông qua ABasicController
+            news.setAccount(account);
+
+            // THÊM: Gán Category nếu exists
+            Category category = new Category();
+            category.setId(createNewsForm.getCategoryId());
+            news.setCategory(category);
             newsRepository.save(news);
 
-            apiMessageDto.setMessage("Create news success!");
-            return apiMessageDto;
+            return makeSuccessResponse("Create news success!");
 
         } catch (Exception e) {
             log.error("Error: ", e);

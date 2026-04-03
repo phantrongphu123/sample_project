@@ -20,4 +20,9 @@ public class News extends Auditable<String> {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+    // account
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id") // Tên cột trong bảng news ở database sẽ là account_id
+    private Account account;
 }
